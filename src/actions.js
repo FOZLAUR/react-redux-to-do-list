@@ -1,15 +1,17 @@
-export const addToDo = todo => {
-    return {type: "ADD_ITEM", payload: todo};
-}
+export const addTask = (task) => {
+  return {type: "ADD_TASK", payload: task}
+};
 
-export const updateToDo = id => {
-    return {type: "UPDATE_ITEM", payload: id};
-}
+export const initTaskList = tasks => ({
+    type: 'INIT_TASK_LIST',
+    payload: tasks
+});
 
-export const deleteToDo = id => {
-    return {type: "DELETE_ITEM", payload: id};
-}
+export const deleteTask = (id) => {
+  return {type: "DELETE_TASK", payload: id}
+};
 
-export const initToDo = todos => {
-    return {type: "INIT_TODO", payload: todos};
-}
+export const markTaskDone = (id) => {
+  return {type: "DONE_TASK", payload: id}
+};
+

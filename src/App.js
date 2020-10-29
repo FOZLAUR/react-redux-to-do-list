@@ -1,46 +1,81 @@
+import React from 'react';
 import './App.css';
-import ToDoList from './components/ToDoList';
-import NotFound from './components/NotFound';
-import DoneListContainer from './containers/DoneListContainer';
-import {HashRouter, BrowserRouter, Route, Link, Switch} from 'react-router-dom';
-import React, { Component } from 'react';
+import TodoList from "./components/TodoList";
+import {BrowserRouter, Link, Switch, Route} from "react-router-dom";
+import TodoGeneratorContainer from "./containers/TodoGeneratorContainer";
+import TodoGroupContainer from "./containers/TodoGroupContainer";
+import TodoDoneContainer from './containers/TodoDoneContainer';
+import {getAllTaskList} from "./apis/todos";
+import {initTaskList} from "./actions";
 import {connect} from "react-redux";
-import {getTodos} from './apis/todos';
-import {initToDo} from './actions';
-import { Menu } from 'antd';
-import { HomeOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import "antd/dist/antd.css";
+import {Breadcrumb, Menu, BackTop} from 'antd';
+import NotFound from "./components/NotFound";
+import { HomeOutlined, ToTopOutlined } from '@ant-design/icons';
 
-class App extends Component {
-  componentDidMount(){
-    getTodos().then(response =>{
-      console.log(response);
-      this.props.initToDo(response.data);
-    });
-  }
 
-  render() {
-    return (
-      <div>
-        <BrowserRouter>
-          <Menu mode="horizontal" defaultSelectedKeys={['home']}>
-            <Menu.Item key="home" icon={<HomeOutlined />}><Link to="/">Home Page</Link></Menu.Item>
-            <Menu.Item key="done" icon={<UnorderedListOutlined />}><Link to="/donepage">Done List</Link></Menu.Item>
-          </Menu>
-          
-          <Switch>
-            <Route exact path="/donepage" component={DoneListContainer}></Route>
-            <Route exact path="/" component={ToDoList}></Route>
-            <Route path="*" component={NotFound}></Route>
-          </Switch>
-        </BrowserRouter>
-      </div>
-    );
-  }
+class App extends React.Component {
+    componentDidMount() {
+        getAllTaskList().then(response => {
+            this.props.initTaskList(response.data);
+        })
+    }
+
+    render() {
+        const backToUp = {
+            height: 40,
+            width: 40,
+            lineHeight: '40px',
+            borderRadius: 4,
+            backgroundColor: '#1088e9',
+            color: '#fff',
+            textAlign: 'center',
+            fontSize: 14,
+        };
+
+        const menu = (
+            <Menu>
+                <Menu.Item>
+                    <Link to="/list">Pending</Link>
+                </Menu.Item>
+                <Menu.Item>
+                    <Link to="/done">Done Tasks</Link>
+                </Menu.Item>
+            </Menu>
+        );
+
+        return (
+            <React.Fragment>
+                <header className="App-header">
+                    <div style={{ height: '400vh', padding: 8 }}>
+                    <BrowserRouter>
+                        <Breadcrumb>
+                            <Breadcrumb.Item><Link to="/"><HomeOutlined /> Home </Link></Breadcrumb.Item>
+                            <Breadcrumb.Item overlay={menu}>
+                                Filter
+                            </Breadcrumb.Item>
+                        </Breadcrumb>
+
+                        <Switch>
+                            <Route exact path="/" component={TodoList}></Route>
+                            <Route exact path="/generator" component={TodoGeneratorContainer}></Route>
+                            <Route exact path="/list" component={TodoGroupContainer}></Route>
+                            <Route exact path="/done" component={TodoDoneContainer}></Route>
+                            <Route component={NotFound}></Route>
+                        </Switch>
+                    </BrowserRouter>
+                        <BackTop>
+                            <div style={backToUp}><ToTopOutlined /></div>
+                        </BackTop>
+                    </div>
+                </header>
+            </React.Fragment>
+        );
+    }
 }
 
 const mapDispatchToProps = dispatch => ({
-  initToDo : (todos) => {dispatch(initToDo(todos))},
-})
+    initTaskList: tasks => dispatch(initTaskList(tasks))
+});
 
 export default connect(null, mapDispatchToProps)(App);
+

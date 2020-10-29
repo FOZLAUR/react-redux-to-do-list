@@ -14,14 +14,15 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  /* background-color: #bd5838; */
+  background-image: url(".//OOCL_Panama\,_Fremantle\,_2015_\(04\).JPG");
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #000000;
 }
 
 .App-link {
@@ -35,14 +36,4 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-
-
-fieldset {
-  border: 1px solid #edece8;
-}
-
-.crossed-line {
-  text-decoration: line-through;
 }
