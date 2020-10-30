@@ -13,7 +13,5 @@ export const deleteTask = (id) => {
 }
 
 export const toggleTask = (id, taskStatus) => {
-    return api.put(`/todos/${id}`, {
-        done: !taskStatus
-    })
+    return api.put(`/todos/${id}`)
 }
